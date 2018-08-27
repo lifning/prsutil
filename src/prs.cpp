@@ -1,4 +1,6 @@
-typedef unsigned long u32;
+#include <stdint.h>
+typedef uint32_t u32;
+static_assert(sizeof(u32) == 4, "sizeof(u32) is not 4 bytes");
 typedef unsigned char u8;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -171,11 +173,11 @@ u32 prs_compress(void* source,void* dest,u32 size)
         for (y = x - 3; (y > 0) && (y > (x - 0x1FF0)) && (xsize < 255); y--)
         {
             xsize = 3;
-            if (!memcmp((void*)((DWORD)source + y),(void*)((DWORD)source + x),xsize))
+            if (!memcmp((void*)((u32)source + y),(void*)((u32)source + x),xsize))
             {
                 do xsize++;
-                while (!memcmp((void*)((DWORD)source + y),
-                               (void*)((DWORD)source + x),
+                while (!memcmp((void*)((u32)source + y),
+                               (void*)((u32)source + x),
                                xsize) &&
                        (xsize < 256) &&
                        ((y + xsize) < x) &&
@@ -192,7 +194,7 @@ u32 prs_compress(void* source,void* dest,u32 size)
         if (lssize == 0)
         {
             printf("> > > %08X->%08X byte\n",x,pc.dstptr - pc.dstptr_orig);
-            //pc.srcptr = (u8*)((DWORD)source + x);
+            //pc.srcptr = (u8*)((u32)source + x);
             prs_rawbyte(&pc);
         } else {
             //if (lssize > 250) lssize = 250;
